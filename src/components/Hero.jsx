@@ -2,11 +2,27 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { heroVideo, smallHeroVideo } from "../utils";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const Hero = () => {
   const [videoSrc, setVideoSrc] = useState(
     window.innerHeight < 760 ? smallHeroVideo : heroVideo
   );
+
+  const handleViderSrcSet = () => {
+    if (window.innerWidth < 760) {
+      setVideoSrc(smallHeroVideo);
+    } else {
+      setVideoSrc(heroVideo);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleViderSrcSet);
+    return () => {
+      window.removeEventListener("resize", handleViderSrcSet);
+    };
+  }, []);
 
   useGSAP(() => {
     gsap.to("#hero", { opacity: 1, delay: 1.5 });
